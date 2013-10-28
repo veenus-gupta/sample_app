@@ -26,7 +26,7 @@ describe "User pages" do
       before(:all) { 30.times { FactoryGirl.create(:user) } }
       after(:all)  { User.delete_all }
 
-      it { should have_selector('div.pagination') }
+      it { should have_css('div.pagination') }
 
       it "should list each user" do
         User.paginate(page: 1).each do |user|
@@ -172,6 +172,22 @@ describe "User pages" do
       it { should have_content(m1.content) }
       it { should have_content(m2.content) }
       it { should have_content(user.microposts.count) }
+
+      describe "pagination" do
+
+      before(:all) do
+        30.times { FactoryGirl.create(:micropost, user: user) }
+      end
+      after(:all)  { user.microposts.delete_all unless user.microposts.nil? }
+
+      it { should have_selector('div.pagination') }
+
+      it "should list each user" do
+        user.feed.paginate(page: 1).each do |post|
+          page.should have_selector('li', text: post.content)
+        end
+      end
+    end
     end
   end
 end

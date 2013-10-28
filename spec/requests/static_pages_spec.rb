@@ -32,6 +32,18 @@ describe "Static pages" do
           page.should have_selector("li##{item.id}", text: item.content)
         end
       end
+      it "should show the total feeds" do
+        expect(page).to have_content("micropost".pluralize(user.feed.count))                  
+      end
+      # it "no delete link for others posting" do
+      #   user.feed.each do |item|
+      #     if item.user != user
+      #       page.should_not have_link("delete")
+      #     else
+      #       page.should have_link("delete") 
+      #     end
+      # end
+
     end
   end
 
